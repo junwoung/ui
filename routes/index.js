@@ -1,9 +1,19 @@
-var express = require('express');
-var router = express.Router();
+const routers = [
+  {
+    pre: 'hello',
+    router: require('../business/hello/index')
+  },
+  {
+    pre: 'user',
+    router: require('../business/user/index')
+  }
+]
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
-
-module.exports = router;
+//  批量注册路由
+module.exports = class Routers {
+  static register (app) {
+    routers.forEach(item => {
+      app.use(`/${item.pre}`, item.router)
+    })
+  }
+}
